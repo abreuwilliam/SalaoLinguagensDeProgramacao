@@ -89,8 +89,12 @@ swagger = Swagger(
     template=swagger_template
 )
 
-# MODELOS
+# 1. MODELOS (Carregue primeiro)
 from .models.usuario_model import UsuarioModel
+from .models.servico_model import ServicoModel
+from .models.agendamento_model import AgendamentoModel
 
-# VIEWS
-from .views import usuario_view
+# 2. VIEWS (Carregue depois, como módulos)
+from src.views import usuario_view
+from src.views import servico_view
+from src.views import agendamento_view

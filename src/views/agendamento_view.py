@@ -5,7 +5,9 @@ from flask_jwt_extended import jwt_required, get_jwt_identity
 from src.schemas import agendamento_schema
 from src.models.agendamento_model import AgendamentoModel
 from src.services import agendamento_service
+from flask_restful import Resource
 from src import api
+
 
 class AgendamentoList(Resource):
     @jwt_required()
@@ -55,6 +57,24 @@ class AgendamentoList(Resource):
 class AgendamentoResource(Resource):
     @jwt_required()
     def get(self, id_agendamento):
+        """
+        Busca um agendamento por ID
+        ---
+        tags:
+          - Agendamento
+        security:
+          - Bearer: []
+        parameters:
+          - name: id_agendamento
+            in: path
+            type: integer
+            required: true
+        responses:
+          200:
+            description: Agendamento encontrado com sucesso
+          404:
+            description: Agendamento não encontrado
+        """
         agendamento = agendamento_service.listar_agendamento_id(id_agendamento)
         if not agendamento:
             return make_response(jsonify({'message': 'Não encontrado'}), 404)
@@ -64,10 +84,27 @@ class AgendamentoResource(Resource):
 
     @jwt_required()
     def delete(self, id_agendamento):
+        """
+        Deleta um agendamento
+        ---
+        tags:
+          - Agendamento
+        security:
+          - Bearer: []
+        parameters:
+          - name: id_agendamento
+            in: path
+            type: integer
+            required: true
+        responses:
+          200:
+            description: Deletado com sucesso
+          404:
+            description: Não encontrado
+        """
         if agendamento_service.deletar_agendamento(id_agendamento):
             return make_response(jsonify({'message': 'Deletado com sucesso'}), 200)
         return make_response(jsonify({'message': 'Não encontrado'}), 404)
-
 # Registro das rotas
 api.add_resource(AgendamentoList, '/agendamentos')
 api.add_resource(AgendamentoResource, '/agendamentos/<int:id_agendamento>')
