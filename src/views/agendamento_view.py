@@ -29,25 +29,30 @@ class AgendamentoList(Resource):
         """
         Cria um novo agendamento
         ---
-        tags: [Agendamento]
-        security: [{Bearer: []}]
+        tags:
+          - Agendamento
+        security:
+          - Bearer: []
         parameters:
           - in: body
             name: body
+            required: true
             schema:
               type: object
               properties:
-                data: {type: string}
-                servico_id: {type: integer}
+                data_hora: {type: string, format: date-time, example: "2026-06-10T14:30:00"}
+                servico_id: {type: integer, example: 1}
+                usuario_id: {type: integer, example: 1}
+                status: {type: string, example: "Agendado"}
         responses:
-          201: {description: Agendamento criado}
+          201: {description: Agendamento criado com sucesso}
+          400: {description: Erro de validação}
         """
         schema = agendamento_schema.AgendamentoSchema()
         try:
             dados = schema.load(request.json)
-            # Adiciona o usuário logado ao agendamento se necessário
-            usuario_id = get_jwt_identity()
-            dados['usuario_id'] = usuario_id
+        
+            dados['usuario_id'] = int(dados['usuario_id'])
             
             resultado = agendamento_service.cadastrar_agendamento(dados)
             return make_response(jsonify(schema.dump(resultado)), 201)
@@ -105,6 +110,53 @@ class AgendamentoResource(Resource):
         if agendamento_service.deletar_agendamento(id_agendamento):
             return make_response(jsonify({'message': 'Deletado com sucesso'}), 200)
         return make_response(jsonify({'message': 'Não encontrado'}), 404)
-# Registro das rotas
+    @jwt_required()
+    def put(self, id_agendamento):
+        """
+        Atualiza um agendamento existente
+        ---
+        tags:
+          - Agendamento
+        security:
+          - Bearer: []
+        parameters:
+          - name: id_agendamento
+            in: path
+            type: integer
+            required: true
+          - in: body
+            name: body
+            required: true
+            schema:
+              type: object
+              properties:
+                data_hora: {type: string, format: date-time, example: "2026-06-10T14:30:00"}
+                servico_id: {type: integer, example: 1}
+                usuario_id: {type: integer, example: 1}
+                status: {type: string, example: "Agendado"}
+        responses:
+          200:
+            description: Agendamento atualizado com sucesso
+          404:
+            description: Agendamento não encontrado
+          400:
+            description: Erro de validação
+        """
+        schema = agendamento_schema.AgendamentoSchema()
+        try:
+            dados = schema.load(request.json)
+            
+            dados['usuario_id'] = int(dados['usuario_id'])
+            
+            agendamento_atualizado = agendamento_service.editar_agendamento(id_agendamento, dados)
+            
+            if not agendamento_atualizado:
+                return make_response(jsonify({'message': 'Agendamento não encontrado'}), 404)
+            
+            return make_response(jsonify(schema.dump(agendamento_atualizado)), 200)
+            
+        except ValidationError as err:
+            return make_response(jsonify(err.messages), 400)
+
 api.add_resource(AgendamentoList, '/agendamentos')
 api.add_resource(AgendamentoResource, '/agendamentos/<int:id_agendamento>')
