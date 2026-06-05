@@ -85,6 +85,6 @@ python src/app.py
 - Caso queira iniciar o projeto, adicione o ponto de entrada Flask em `src/app.py` e mantenha a modelagem de banco em `DB/modelagem.mwb`.
 
 set FLASK_APP=app.py
-flask db migrate -m "criacao da tabela produto"
+flask db migrate -m "criacao da tabela agendamento e servico"
 4. Aplicar no banco
 flask db upgrade
