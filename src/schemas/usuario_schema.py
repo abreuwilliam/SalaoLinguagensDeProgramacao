@@ -1,4 +1,4 @@
-# vamos fazer a validacao de dados e serializacao
+
 
 from src import ma
 from src.models import usuario_model

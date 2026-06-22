@@ -1,4 +1,4 @@
-# criar o modelo do banco de dados para a tabela de usuario
+
 
 from src import db
 from passlib.context import CryptContext
@@ -18,7 +18,7 @@ class UsuarioModel(db.Model):
     def gen_senha(self, senha):
         self.senha = self.pwd_context.hash(senha)
 
-        # aqui salvaríamos no banco: Usuario(nome=nome, senha=senha_hash)
+     
         
 
     def verifica_senha(self, senha):
