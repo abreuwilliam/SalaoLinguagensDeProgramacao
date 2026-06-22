@@ -45,12 +45,12 @@ class ServicoList(Resource):
                 nome:
                   type: string
                   example: "Corte de cabelo"
-                descricao:
-                  type: string
-                  example: "Corte masculino completo"
                 preco:
                   type: number
                   example: 50.0
+                duracao_minutos:
+                  type: integer
+                  example: 30 
         responses:
           201:
             description: Serviço criado com sucesso
@@ -123,12 +123,12 @@ class ServicoResource(Resource):
                 nome:
                   type: string
                   example: "Corte de cabelo"
-                descricao:
-                  type: string
-                  example: "Corte masculino completo"
                 preco:
                   type: number
                   example: 50.0
+                duracao_minutos:
+                  type: integer
+                  example: 30
         responses:
           200:
             description: Serviço atualizado com sucesso

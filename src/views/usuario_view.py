@@ -75,11 +75,11 @@ class UsuarioList(Resource):
               properties:
                 nome:
                   type: string
-                  example: William
+                  example: test
 
                 email:
                   type: string
-                  example: william@gmail.com
+                  example: test@gmail.com
 
                 senha:
                   type: string
@@ -225,11 +225,11 @@ class UsuarioResource(Resource):
               properties:
                 nome:
                   type: string
-                  example: William
+                  example: test
 
                 email:
                   type: string
-                  example: william@gmail.com
+                  example: test@gmail.com
 
                 senha:
                   type: string
@@ -347,7 +347,7 @@ class LoginResource(Resource):
               properties:
                 email:
                   type: string
-                  example: william@gmail.com
+                  example: test@gmail.com
 
                 senha:
                   type: string
